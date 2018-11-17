@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="referrer" content="never">
+    <title>战队成绩表</title>
+
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
+	<script type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <style>body,td{font-size:12px !important}</style>
+
+</head>
+<body>
+<script>
+
+    {#数字前补0#}
+    function ZeroPadding(num, length) {
+        for(var len = (num + "").length; len < length; len = num.length) {
+            num = "0" + num;
+        }
+        return num;
+    }
+
+    var table;
+    $(document).ready(function() {
+    table=$('#example').DataTable( {
+        "ajax": {
+            "url":'/getAll',
+            "data": function ( d ) {
+                d.datarange_search = $('#reportrange span').html();
+                d.heroType_search = $('#heroTypeSel').val();
+                d.gameType_search = $('#gameTypeSel').val();
+            }
+        },
+        "order":[[ 20, "desc" ],[ 3, "desc" ],[ 5, "desc" ]],
+        "columnDefs": [
+    		{ "width": "120px", "targets": 0 },
+		    { "width": "50px", "targets": 1 },
+            { "width": "60px", "targets": 21 },
+	{
+                {#昵称加ICON、性别#}
+                "render": function ( data, type, row ) {
+                     var str="<span hidden>"+data+"</span><div><div style='float:left; display:inline; margin-top:2px; margin-left:1px;'><img src="+row[18]+" width=18px height=18px></div><div style='float:left; display:inline; margin:3px 0px 0px 5px;'><span>"+data+"</span></div>"
+                    str+="<div style='float:left; display:inline; margin-top:4px; margin-left:2px;'>"
+                    if(row[19]==1){
+                        str+="<img src=/static/man.png>"  ;
+                    }else if(row[19]==2){
+                        str+="<img src=/static/female.png>";
+                    }
+                    str+="</div></div>"
+                    return str
+                },
+                "targets": [0]
+            },
+            {
+                {#显示常用英雄头像#}
+                "render": function ( data, type, row ) {
+                    var str="";
+                    try{
+                        var heroCount = 0;
+                        $.each(data.split(','),function(index,value){
+                            str+='<img src='+value+' width=20px height=20px style="margin-left:1px"'
+                            str+='title="'
+                            str+=row[24].split(",")[heroCount];
+                            str+=' [使用次数:'
+                            str+=row[22].split(",")[heroCount];
+                            str+='][平均得分:'
+                            str+=Number((row[23].split(",")[heroCount])).toFixed(2);
+                            str+=']"'
+                            str+='>'
+                            heroCount++;
+                        });
+                    }catch (e){
+                        console.log(e)
+                    }
+                    return str
+                },
+                "targets": [21]
+            },
+            {
+                {#显示百分数#}
+                "render": function ( data, type, row ) {
+                     var str=Number(data*100).toFixed(1);
+                     str+="%";
+                    return str
+                },
+                "targets": [4,9,10,11,12]
+            },
+            {
+                {#显示2位小数#}
+                "render": function ( data, type, row ) {
+                     var str=Number(data).toFixed(2);
+                    return str
+                },
+                "targets": [5,6,7,8]
+            },
+            {
+                {#修正级别排序问题#}
+                "render": function ( data, type, row ) {
+                     var str="<span hidden>"+ZeroPadding(row[20],2)+"</span>"+data;
+                    return str
+                },
+                "targets": [1]
+            },
+            {#隐藏列#}
+            { "visible": false,  "targets": [ 18,19,20,22,23,24 ] }
+        ],
+        "iDisplayLength":150,
+        "aLengthMenu" : [20, 50, 100,150], //更改显示记录数选项
+        "language": {
+               "sProcessing": "处理中...",
+               "sLengthMenu": "显示 _MENU_ 项结果",
+               "sZeroRecords": "没有匹配结果",
+               "sInfo": "显示第 _START_ 至 _END_ 项结果，共 _TOTAL_ 项",
+               "sInfoEmpty": "显示第 0 至 0 项结果，共 0 项",
+               "sInfoFiltered": "(由 _MAX_ 项结果过滤)",
+               "sInfoPostFix": "",
+               "sSearch": "搜索:",
+               "sUrl": "",
+               "sEmptyTable": "表中数据为空",
+               "sLoadingRecords": "载入中...",
+               "sInfoThousands": ",",
+               "oPaginate": {
+                   "sFirst": "首页",
+                   "sPrevious": "上页",
+                   "sNext": "下页",
+                   "sLast": "末页"
+               },
+               "oAria": {
+                   "sSortAscending": ": 以升序排列此列",
+                   "sSortDescending": ": 以降序排列此列"
+               }
+           },
+        "dom": "<'row'<'span9'l<'#heroType'><'#gameType'><'#mytoolbox'>><'span3'f>r>"+
+                   "t"+
+                   "<'row'<'span6'i><'span6'p>>"  ,
+        initComplete:initComplete
+    } );
+
+    function initComplete(data){
+
+       var dataPlugin =
+               '<div id="reportrange" class="pull-left dateRange" style="width:400px;margin-left: 10px"> '+
+               '日期：<i class="glyphicon glyphicon-calendar fa fa-calendar"></i> '+
+               '<span id="searchDateRange"></span>  '+
+               '<b class="caret"></b></div> ';
+       $('#mytoolbox').append(dataPlugin);
+       $('#mytoolbox').addClass( "dataTables_length" );
+
+        {#人物位置筛选栏#}
+       dataPlugin = '<select style="margin-left:10px" id="heroTypeSel" name="heroTypeSel" aria-controls="example" class>' +
+           '<option value="-1">全部位置</option>' +
+           '<option value="0">上路</option>' +
+           '<option value="1">中路</option>' +
+           '<option value="2">下路</option>' +
+           '<option value="3">打野</option>' +
+           '<option value="4">辅助</option>' +
+           '</select>'
+       $('#heroType').append(dataPlugin);
+       $('#heroType').addClass( "dataTables_length" );
+
+       $("#heroType").change(function(){
+            //当选择位置后，出发dt的重新加载数据的方法
+            table.ajax.reload();
+           //获取dt请求参数
+           var args = table.ajax.params();
+           console.log("额外传到后台的参数值herotype_search为："+args.herotype_search);
+        });
+
+               {#比赛类型筛选栏#}
+       dataPlugin = '<select style="margin-left:10px" id="gameTypeSel" name="gameTypeSel" aria-controls="example" class>' +
+           '<option value="-1">全部比赛</option>' +
+           '<option value="4">排位赛</option>' +
+           '<option value="14">巅峰赛</option>' +
+           '<option value="11">战队赛</option>' +
+           '</select>'
+       $('#gameType').append(dataPlugin);
+       $('#gameType').addClass( "dataTables_length" );
+
+       $("#gameType").change(function(){
+            //当选择位置后，出发dt的重新加载数据的方法
+            table.ajax.reload();
+           //获取dt请求参数
+           var args = table.ajax.params();
+           console.log("额外传到后台的参数值gametype_search为："+args.gametype_search);
+        });
+
+
+       //时间插件
+       var start = moment().startOf('day').subtract(29, 'days');
+       var end = moment().endOf('day');
+       function cb(start, end) {
+        $('#reportrange span').html(start.format('YYYY-MM-DD HH:mm:ss') + ' - ' + end.format('YYYY-MM-DD HH:mm:ss'));
+        }
+
+
+       $('#reportrange').daterangepicker(
+               {
+                   startDate: moment().subtract('days', 29),
+                   endDate: moment(),
+                   minDate: '10/01/2018',    //最小时间
+                   maxDate : moment(), //最大时间
+                   dateLimit : {
+                       days : 365
+                   }, //起止时间的最大间隔
+                   showDropdowns : true,
+                   showWeekNumbers : false, //是否显示第几周
+                   timePicker : false, //是否显示小时和分钟
+                   timePickerIncrement : 60, //时间的增量，单位为分钟
+                   timePicker12Hour : false, //是否使用12小时制来显示时间
+                   ranges : {
+                       '今日': [moment().startOf('day'), moment()],
+                       '昨日': [moment().subtract('days', 1).startOf('day'), moment().subtract('days', 1).endOf('day')],
+                       '最近7日': [moment().subtract('days', 6), moment()],
+                       '最近30日': [moment().subtract('days', 29), moment()],
+                   },
+                   opens : 'right', //日期选择框的弹出位置
+                   buttonClasses : [ 'btn btn-default' ],
+                   applyClass : 'btn-small btn-primary blue',
+                   cancelClass : 'btn-small',
+                   format : 'YYYY-MM-DD HH:mm:ss', //控件中from和to 显示的日期格式
+                   separator : ' to ',
+                   locale : {
+                       applyLabel : '确定',
+                       cancelLabel : '取消',
+                       fromLabel : '起始时间',
+                       toLabel : '结束时间',
+                       customRangeLabel : '自定义',
+                       daysOfWeek : [ '日', '一', '二', '三', '四', '五', '六' ],
+                       monthNames : [ '一月', '二月', '三月', '四月', '五月', '六月',
+                           '七月', '八月', '九月', '十月', '十一月', '十二月' ],
+                       firstDay : 1
+                   }
+               },  cb);
+
+                  cb(start, end);
+
+
+
+       //选择时间后触发重新加载的方法
+       $("#reportrange").on('apply.daterangepicker',function(){
+           //当选择时间后，出发dt的重新加载数据的方法
+            table.ajax.reload();
+           //获取dt请求参数
+           var args = table.ajax.params();
+           console.log("额外传到后台的参数值datarange_search为："+args.datarange_search);
+       });
+   }
+
+} );
+
+    </script>
+<table id="example" class="dataTable display cell-border compact" style="width:100%">
+        <thead>
+            <tr>
+                <th>队员昵称</th>
+                <th>等级</th>
+                <th>总场次</th>
+                <th>胜利场次</th>
+                <th>胜率</th>
+                <th>平均得分</th>
+                <th>平均击杀</th>
+                <th>平均死亡</th>
+                <th>平均助攻</th>
+                <th>平均总伤害</th>
+                <th>平均英雄伤害</th>
+                <th>平均承伤</th>
+                <th>平均参团</th>
+                <th>上路</th>
+                <th>中路</th>
+                <th>下路</th>
+                <th>打野</th>
+                <th>辅助</th>
+                <th>ICON</th>
+                <th>性别</th>
+                <th>rank</th>
+                <th>常用英雄</th>
+                <th>使用次数</th>
+                <th>英雄得分</th>
+                <th>英雄名称</th>
+            </tr>
+        </thead>
+        <tfoot>
+            <tr>
+                <th>队员昵称</th>
+                <th>等级</th>
+                <th>总场次</th>
+                <th>胜利场次</th>
+                <th>胜率</th>
+                <th>平均得分</th>
+                <th>平均击杀</th>
+                <th>平均死亡</th>
+                <th>平均助攻</th>
+                <th>平均总输出率</th>
+                <th>平均对英雄输出率</th>
+                <th>平均承伤率</th>
+                <th>平均参团率</th>
+                <th>上路</th>
+                <th>中路</th>
+                <th>下路</th>
+                <th>打野</th>
+                <th>辅助</th>
+                <th>ICON</th>
+                <th>性别</th>
+                <th>rank</th>
+                <th>常用英雄</th>
+                <th>使用次数</th>
+                <th>英雄得分</th>
+                <th>英雄名称</th>
+            </tr>
+        </tfoot>
+    </table>
+</body>
+</html>
