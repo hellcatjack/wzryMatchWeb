@@ -82,8 +82,8 @@ def getAll():
         if (not gameTypeStr) or int(gameTypeStr) == -1:
             sql = sql.replace('and b.gametype = :gameTypeStr', '')
 
-        print(sql)
-        print(gameTypeStr)
+        # print(sql)
+        # print(gameTypeStr)
         rs = db_session.execute(sql,{'dataRangeStartTimeStamp':str(dataRangeStartTimeStamp),'dataRangeEndTimeStamp':str(dataRangeEndTimeStamp),'heroTypeStr':str(heroTypeStr),'gameTypeStr':str(gameTypeStr)})
         jsonStr = {"data":[]}
         for row in rs:
