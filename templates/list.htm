@@ -37,12 +37,12 @@
                 d.gameType_search = $('#gameTypeSel').val();
             }
         },
-        "order":[[ 20, "desc" ],[ 3, "desc" ],[ 5, "desc" ]],
+        "order":[[ 1, "desc" ],[ 3, "desc" ],[ 5, "desc" ]],
         "columnDefs": [
     		{ "width": "120px", "targets": 0 },
 		    { "width": "50px", "targets": 1 },
             { "width": "60px", "targets": 21 },
-	{
+	        {
                 {#昵称加ICON、性别#}
                 "render": function ( data, type, row ) {
                      var str="<span hidden>"+data+"</span><div><div style='float:left; display:inline; margin-top:2px; margin-left:1px;'><img src="+row[18]+" width=18px height=18px></div><div style='float:left; display:inline; margin:3px 0px 0px 5px;'><span>"+data+"</span></div>"
@@ -71,6 +71,10 @@
                             str+=row[22].split(",")[heroCount];
                             str+='][平均得分:'
                             str+=Number((row[23].split(",")[heroCount])).toFixed(2);
+                            str+='][金牌/银牌:'
+                            str+=row[25].split(",")[heroCount];
+                            str+='/'
+                            str+=row[26].split(",")[heroCount];
                             str+=']"'
                             str+='>'
                             heroCount++;
@@ -108,7 +112,7 @@
                 "targets": [1]
             },
             {#隐藏列#}
-            { "visible": false,  "targets": [ 18,19,20,22,23,24 ] }
+            { "visible": false,  "targets": [ 18,19,20,22,23,24,25,26 ] }
         ],
         "iDisplayLength":150,
         "aLengthMenu" : [20, 50, 100,150], //更改显示记录数选项
@@ -283,6 +287,8 @@
                 <th>使用次数</th>
                 <th>英雄得分</th>
                 <th>英雄名称</th>
+                <th>金牌数</th>
+                <th>银牌数</th>
             </tr>
         </thead>
         <tfoot>
@@ -312,6 +318,8 @@
                 <th>使用次数</th>
                 <th>英雄得分</th>
                 <th>英雄名称</th>
+                <th>金牌数</th>
+                <th>银牌数</th>
             </tr>
         </tfoot>
     </table>
