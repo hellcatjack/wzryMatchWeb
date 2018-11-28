@@ -106,7 +106,7 @@
             {
                 {#修正级别排序问题#}
                 "render": function ( data, type, row ) {
-                     var str="<span hidden>"+ZeroPadding(row[20],2)+"</span>"+data+' ☆×'+row[27];
+                     var str="<span hidden>"+ZeroPadding(row[20]*1000+row[27],6)+"</span>"+data+' ☆×'+row[27];
                     return str
                 },
                 "targets": [1]
