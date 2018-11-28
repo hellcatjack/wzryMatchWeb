@@ -147,9 +147,26 @@ try:
         new_member.rank = 0
         new_member.updateDate = current_time
         try:
+
             new_member.sex = member['sex']
         except:
             new_member.sex = 0
+
+        # 获取用户卡片
+        try:
+            reqGetRoleCardPayload = reqGetRoleCardPayload + "&roleid=" + new_member.roleId+"&friendUserId="+str(member['userId'])
+            conn_card = http.client.HTTPSConnection(requrl)
+            conn_card.request('POST', reqMethodGetRoleCard, AddcRand(reqGetRoleCardPayload), headerdata)
+            response_card = conn_card.getresponse()
+            res_card = response_card.read()
+
+            resCardData = json.loads(res_card.decode('utf-8'))
+            cardDate = resCardData['data']
+            new_member.rankStar = int(cardDate['rankingStar'])
+        except:
+            print('出现异常：:\n%s' % traceback.format_exc())
+            print('****** 获取用户卡片处理出错 ******')
+            new_member.rankStar=0
 
         sessionMember = db_session()
         # 添加到session:
@@ -157,6 +174,8 @@ try:
         # 提交即保存到数据库:
         sessionMember.commit()
         print("队员：["+new_member.roleName+"] 资料保存完毕.......")
+
+
 
         if (isImport) :
             # print('请求参数')

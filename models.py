@@ -19,6 +19,7 @@ class Members(Base):
     nickname = Column(String(100))
     sex = Column(Integer)
     rank = Column(Integer)
+    rankStar = Column(Integer)
     updateDate = Column(DateTime, default=datetime.datetime.now)
 
 class Matchs(Base):

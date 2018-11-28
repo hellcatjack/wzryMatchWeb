@@ -40,7 +40,7 @@
         "order":[[ 1, "desc" ],[ 3, "desc" ],[ 5, "desc" ]],
         "columnDefs": [
     		{ "width": "120px", "targets": 0 },
-		    { "width": "50px", "targets": 1 },
+		    { "width": "80px", "targets": 1 },
             { "width": "60px", "targets": 21 },
 	        {
                 {#昵称加ICON、性别#}
@@ -106,13 +106,13 @@
             {
                 {#修正级别排序问题#}
                 "render": function ( data, type, row ) {
-                     var str="<span hidden>"+ZeroPadding(row[20],2)+"</span>"+data;
+                     var str="<span hidden>"+ZeroPadding(row[20],2)+"</span>"+data+' ☆×'+row[27];
                     return str
                 },
                 "targets": [1]
             },
             {#隐藏列#}
-            { "visible": false,  "targets": [ 18,19,20,22,23,24,25,26 ] }
+            { "visible": false,  "targets": [ 18,19,20,22,23,24,25,26,27 ] }
         ],
         "iDisplayLength":150,
         "aLengthMenu" : [20, 50, 100,150], //更改显示记录数选项
@@ -289,6 +289,7 @@
                 <th>英雄名称</th>
                 <th>金牌数</th>
                 <th>银牌数</th>
+                <th>星星数</th>
             </tr>
         </thead>
         <tfoot>
@@ -320,6 +321,7 @@
                 <th>英雄名称</th>
                 <th>金牌数</th>
                 <th>银牌数</th>
+                <th>星星数</th>
             </tr>
         </tfoot>
     </table>

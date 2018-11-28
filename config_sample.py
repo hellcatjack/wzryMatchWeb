@@ -14,12 +14,16 @@ reqPlayGetmatchlistPayload = reqBasePlayGetmatchlistPayload + "&token=" + reqTok
 # 获取成员比赛详情信息
 reqBasePlayGetPlaydetailPayload = ""
 reqPlayGetPlaydetailPayload = reqBasePlayGetPlaydetailPayload + "&token=" + reqToken
+# 获取成员卡片
+reqBaseGetRoleCardPayload = ""
+reqGetRoleCardPayload = reqBaseGetRoleCardPayload + "&token=" + reqToken
 # 接口地址
 requrl = "ssl.kohsocialapp.qq.com:10001"
 # 接口方法
 reqMethodGameGroupmembers = "/game/groupmembers"
 reqMethodPlayGetmatchlist = "/play/getmatchlist"
 reqMethodPlayGetplaydetail = "/play/getplaydetail"
+reqMethodGetRoleCard = "/game/rolecard"
 # httpHeader
 headerdata = {"Content-type": "application/x-www-form-urlencoded; charset=UTF-8", "noencrypt": "1"}
 
