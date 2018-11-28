@@ -126,16 +126,16 @@ try:
 
     resData = json.loads(res.decode('utf-8'))
     teamMembers = resData['data']
+    current_time = datetime.datetime.now()
 
     # 创建session对象:
-    sessionDel = db_session()
-    sessionDel.query(Members).filter(Members.roleId != -1).delete()
 
     for member in teamMembers:
         print('============================================================ 开始保存队员信息 ============================================================')
         # print('成员数据')
         # print(member)
         roleId = member['roleId']
+
 
         # 创建新Member对象:
         new_member = Members()
@@ -145,6 +145,7 @@ try:
         new_member.nickname = member['nickname']
         new_member.roleIcon = member['roleIcon']
         new_member.rank = 0
+        new_member.updateDate = current_time
         try:
             new_member.sex = member['sex']
         except:
@@ -152,7 +153,7 @@ try:
 
         sessionMember = db_session()
         # 添加到session:
-        sessionMember.add(new_member)
+        sessionMember.merge(new_member)
         # 提交即保存到数据库:
         sessionMember.commit()
         print("队员：["+new_member.roleName+"] 资料保存完毕.......")
@@ -305,6 +306,10 @@ try:
                 print('****** 获取比赛列表处理出错，该用户可能隐藏了战绩 ******')
             finally:
                 print('************** 用户比赛记录处理完毕 **************')
+
+    sessionDel = db_session()
+    ten_mins_ago = current_time - datetime.timedelta(minutes=10)
+    sessionDel.query(Members).filter(Members.updateDate < ten_mins_ago).delete()
 
 except:
     print ('出现异常：:\n%s' % traceback.format_exc())

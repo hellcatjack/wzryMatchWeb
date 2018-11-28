@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from sqlalchemy import Column, String, Text, Integer
+import datetime
+from sqlalchemy import Column, String, Text, Integer,DateTime
 from database import Base
 
 
@@ -18,6 +19,7 @@ class Members(Base):
     nickname = Column(String(100))
     sex = Column(Integer)
     rank = Column(Integer)
+    updateDate = Column(DateTime, default=datetime.datetime.now)
 
 class Matchs(Base):
     # 表的名字:
