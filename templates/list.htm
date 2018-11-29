@@ -29,10 +29,10 @@
     function displayStars(num, rank) {
         var resultStar='';
         if (rank=='26'){
-            resultStar="★<b>×</b>"+num;
+            resultStar="<img src=/static/images/star.png width=12><b>×</b>"+num;
         }else{
             for(var len = 0; len < num; len ++) {
-                resultStar+="★"
+                resultStar+="<img src=/static/images/star.png width=12>"
             }
         }
         return resultStar;
