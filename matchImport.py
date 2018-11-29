@@ -154,7 +154,7 @@ try:
 
         # 获取用户卡片
         try:
-            reqGetRoleCardPayload = reqGetRoleCardPayload + "&roleid=" + new_member.roleId+"&friendUserId="+str(member['userId'])
+            reqGetRoleCardPayload = reqGetRoleCardPayload + "&roleid=" + new_member.roleId
             conn_card = http.client.HTTPSConnection(requrl)
             conn_card.request('POST', reqMethodGetRoleCard, AddcRand(reqGetRoleCardPayload), headerdata)
             response_card = conn_card.getresponse()

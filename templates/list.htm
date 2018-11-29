@@ -25,7 +25,18 @@
         }
         return num;
     }
-
+    {#显示星星#}
+    function displayStars(num, rank) {
+        var resultStar='';
+        if (rank=='26'){
+            resultStar="★<b>×</b>"+num;
+        }else{
+            for(var len = 0; len < num; len ++) {
+                resultStar+="★"
+            }
+        }
+        return resultStar;
+    }
     var table;
     $(document).ready(function() {
     table=$('#example').DataTable( {
@@ -107,7 +118,7 @@
                 {#修正级别排序问题#}
                 "render": function ( data, type, row ) {
                      var str="<span hidden>"+ZeroPadding(row[20]*1000+row[27],6)+"</span><div style='float:left; display:inline; margin-top:2px; margin-left:1px;'><img src=/static/images/"+row[20]+".png width=16></div>"+
-                         '<div style=\'float:left; display:inline; margin-top:4px; margin-left:2px;\'>'+data+' <b>☆×</b>'+row[27]+"</div>";
+                         '<div style=\'float:left; display:inline; margin-top:4px; margin-left:2px;\'>'+data+' '+displayStars(row[27],row[20])+"</div>";
                     return str
                 },
                 "targets": [1]
