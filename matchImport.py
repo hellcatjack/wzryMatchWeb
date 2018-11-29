@@ -154,12 +154,11 @@ try:
 
         # 获取用户卡片
         try:
-            reqGetRoleCardPayload = reqGetRoleCardPayload + "&roleid=" + new_member.roleId
+            reqGetRoleCardPayload = reqGetRoleCardPayload + "&roleId=" + roleId
             conn_card = http.client.HTTPSConnection(requrl)
             conn_card.request('POST', reqMethodGetRoleCard, AddcRand(reqGetRoleCardPayload), headerdata)
             response_card = conn_card.getresponse()
             res_card = response_card.read()
-
             resCardData = json.loads(res_card.decode('utf-8'))
             cardDate = resCardData['data']
             new_member.rankStar = int(cardDate['rankingStar'])
