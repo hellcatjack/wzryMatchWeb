@@ -48,6 +48,51 @@
                 d.gameType_search = $('#gameTypeSel').val();
             }
         },
+        'rowCallback': function(row, data){
+            if (data[4] == 1){
+                $(row).find('td:eq(4)').css('color', '#ff0000');
+            }else if (data[4] >= 0.9){
+                $(row).find('td:eq(4)').css('color', '#ff5400');
+            }else if (data[4] >= 0.8){
+                $(row).find('td:eq(4)').css('color', '#f59100');
+            }else if (data[4] >= 0.7){
+                $(row).find('td:eq(4)').css('color', '#1acb00');
+            }else if (data[4] >= 0.6){
+                $(row).find('td:eq(4)').css('color', '#00d489');
+            }else if (data[4] >= 0.5){
+                $(row).find('td:eq(4)').css('color', '#06a4d0');
+            }else if (data[4] >= 0.4){
+                $(row).find('td:eq(4)').css('color', '#00489c');
+            }else if (data[4] >= 0.3){
+                $(row).find('td:eq(4)').css('color', '#61009c');
+            }else if (data[4] >= 0.2){
+                $(row).find('td:eq(4)').css('color', '#9c0088');
+            }else{
+                $(row).find('td:eq(4)').css('color', '#9c0029');
+            };
+            if (data[5] >= 12){
+                $(row).find('td:eq(5)').css('color', '#ff0000');
+            }else if (data[5] >= 11){
+                $(row).find('td:eq(5)').css('color', '#ff5400');
+            }else if (data[5] >= 10){
+                $(row).find('td:eq(5)').css('color', '#f59100');
+            }else if (data[5] >= 9){
+                $(row).find('td:eq(5)').css('color', '#1acb00');
+            }else if (data[5] >= 8){
+                $(row).find('td:eq(5)').css('color', '#00d489');
+            }else if (data[5] >= 7){
+                $(row).find('td:eq(5)').css('color', '#06a4d0');
+            }else if (data[5] >= 6){
+                $(row).find('td:eq(5)').css('color', '#00489c');
+            }else if (data[5] >= 5){
+                $(row).find('td:eq(5)').css('color', '#61009c');
+            }else if (data[5] >= 4){
+                $(row).find('td:eq(5)').css('color', '#9c0088');
+            }else{
+                $(row).find('td:eq(5)').css('color', '#9c0029');
+            };
+        },
+
         "order":[[ 1, "desc" ],[ 3, "desc" ],[ 5, "desc" ]],
         "columnDefs": [
     		{ "width": "120px", "targets": 0 },
