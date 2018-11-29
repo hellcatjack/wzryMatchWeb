@@ -40,7 +40,7 @@
         "order":[[ 1, "desc" ],[ 3, "desc" ],[ 5, "desc" ]],
         "columnDefs": [
     		{ "width": "120px", "targets": 0 },
-		    { "width": "80px", "targets": 1 },
+		    { "width": "100px", "targets": 1 },
             { "width": "60px", "targets": 21 },
 	        {
                 {#昵称加ICON、性别#}
@@ -48,9 +48,9 @@
                      var str="<span hidden>"+data+"</span><div><div style='float:left; display:inline; margin-top:2px; margin-left:1px;'><img src="+row[18]+" width=18px height=18px></div><div style='float:left; display:inline; margin:3px 0px 0px 5px;'><span>"+data+"</span></div>"
                     str+="<div style='float:left; display:inline; margin-top:4px; margin-left:2px;'>"
                     if(row[19]==1){
-                        str+="<img src=/static/man.png>"  ;
+                        str+="<img src=/static/images/man.png>"  ;
                     }else if(row[19]==2){
-                        str+="<img src=/static/female.png>";
+                        str+="<img src=/static/images/female.png>";
                     }
                     str+="</div></div>"
                     return str
@@ -106,7 +106,8 @@
             {
                 {#修正级别排序问题#}
                 "render": function ( data, type, row ) {
-                     var str="<span hidden>"+ZeroPadding(row[20]*1000+row[27],6)+"</span>"+data+' ☆×'+row[27];
+                     var str="<span hidden>"+ZeroPadding(row[20]*1000+row[27],6)+"</span><div style='float:left; display:inline; margin-top:2px; margin-left:1px;'><img src=/static/images/"+row[20]+".png width=16></div>"+
+                         '<div style=\'float:left; display:inline; margin-top:4px; margin-left:2px;\'>'+data+' <b>☆×</b>'+row[27]+"</div>";
                     return str
                 },
                 "targets": [1]
@@ -263,7 +264,7 @@
         <thead>
             <tr>
                 <th>队员昵称</th>
-                <th>等级</th>
+                <th>段位</th>
                 <th>总场次</th>
                 <th>胜利场次</th>
                 <th>胜率</th>
@@ -295,7 +296,7 @@
         <tfoot>
             <tr>
                 <th>队员昵称</th>
-                <th>等级</th>
+                <th>段位</th>
                 <th>总场次</th>
                 <th>胜利场次</th>
                 <th>胜率</th>
