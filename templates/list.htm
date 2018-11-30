@@ -49,6 +49,22 @@
             }
         },
         'rowCallback': function(row, data){
+            var maxValue = Math.max(data[13],data[14],data[15],data[16],data[17]);
+            if (data[13] == maxValue){
+                $(row).find('td:eq(13)').css('color', '#ff0000');
+            };
+            if (data[14] == maxValue){
+                $(row).find('td:eq(14)').css('color', '#ff0000');
+            };
+            if (data[15] == maxValue){
+                $(row).find('td:eq(15)').css('color', '#ff0000');
+            };
+            if (data[16] == maxValue){
+                $(row).find('td:eq(16)').css('color', '#ff0000');
+            };
+            if (data[17] == maxValue){
+                $(row).find('td:eq(17)').css('color', '#ff0000');
+            };
             if (data[4] == 1){
                 $(row).find('td:eq(4)').css('color', '#ff0000');
             }else if (data[4] >= 0.9){
