@@ -55,7 +55,7 @@ def getAll():
 
         sql = 'SELECT a.roleName 队员昵称,d.roleDesc 等级,COUNT(1) 总场次, SUM(IF(b.gameresult = 1,1,0)) 胜利场次 , SUM(IF(b.gameresult = 1,1,0))/COUNT(1) 胜率, \
             AVG(a.gradeGame) 平均得分,AVG(a.killCnt) 平均击杀,AVG(a.deadCnt) 平均死亡,AVG(a.assistCnt) 平均助攻, \
-            AVG(a.totalHurtPercent) 平均总输出率,AVG(a.totalHurtHeroCntPercent) 平均对英雄输出率,AVG(a.totalBeHurtedCntPercent) 平均承伤率,AVG(a.joinGamePercent) 平均参团率, \
+            AVG(a.totalHurtPercent) 平均总输出率,AVG(a.totalHurtHeroCntPercent) 平均对英雄输出率,AVG(a.totalBeHurtedCntPercent) 平均承伤率,AVG(a.joinGamePercent) 平均参团率, sum(b.mvpcnt)+sum(b.losemvp) MVP ,(sum(b.mvpcnt)+sum(b.losemvp))/COUNT(1) MVP率, \
             SUM(IF (a.heroPosition=0,1,0)) AS 上路,SUM(IF (a.heroPosition=1,1,0)) AS 中路,SUM(IF (a.heroPosition=2,1,0)) AS 下路,SUM(IF (a.heroPosition=3,1,0)) AS 打野,SUM(IF (a.heroPosition=4,1,0)) AS 辅助, \
             d.roleIcon 图标,d.sex 性别,d.rank 等级值 ,e.heroImg 英雄,e.useCnt 英雄使用次数,e.heroGrade 英雄平均得分,e.heroName 英雄名称,e.goldCnt 金牌数量,e.silverCnt 银牌数量,d.rankStar 星星数量 \
         FROM players AS a \
@@ -88,7 +88,7 @@ def getAll():
         jsonStr = {"data":[]}
         for row in rs:
             tmpStr = []
-            for num in range(0, 28):
+            for num in range(0, 30):
                 tmpStr.append(row[num])
             jsonStr["data"].append(tmpStr)
     except Exception:
