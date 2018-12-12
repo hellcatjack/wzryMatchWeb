@@ -33,3 +33,6 @@ serverPort = '8888'
 
 # 是否执行比赛导入
 isImport = True
+
+# 更改token本地command地址
+changeTokenPath = 'd:\\1.bat'

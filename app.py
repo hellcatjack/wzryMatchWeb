@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-import traceback,json,decimal,time,datetime
+import traceback,json,decimal,time,os
 from flask import Flask,render_template,request
 from database import init_db, db_session
 from models import *
@@ -32,6 +32,17 @@ def get(roleId):
     except Exception:
         return 'there isnot %s' % roleId
     return 'hello %s' % u.roleId
+
+@app.route('/changeToken/<token>')
+def changeToken(token):
+    try:
+        if token.isalnum():
+            os.system(changeTokenPath+ ' ' + token)
+        else:
+            return 'Token Error!'
+    except Exception:
+        return 'Error!'
+    return 'Done!'
 
 
 @app.route('/getAll')
