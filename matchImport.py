@@ -165,6 +165,7 @@ try:
         except:
             print('出现异常：:\n%s' % traceback.format_exc())
             print('****** 获取用户卡片处理出错 ******')
+            print(resCardData)
             new_member.rankStar=0
 
         sessionMember = db_session()
