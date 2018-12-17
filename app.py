@@ -59,7 +59,7 @@ def getAll():
             dataRangeEndTimeStamp = int(time.mktime(time.strptime(dataRangeEnd, '%Y-%m-%d %H:%M:%S')))
         else:
             today = datetime.date.today()
-            dataRangeStart = today - datetime.timedelta(days=29)
+            dataRangeStart = today - datetime.timedelta(days=59)
             dataRangeEnd = today + datetime.timedelta(days=1)
             dataRangeStartTimeStamp  = int(time.mktime(time.strptime(str(dataRangeStart), '%Y-%m-%d')))
             dataRangeEndTimeStamp = int(time.mktime(time.strptime(str(dataRangeEnd), '%Y-%m-%d')))-1

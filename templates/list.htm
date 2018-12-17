@@ -269,7 +269,7 @@
 
 
        //时间插件
-       var start = moment().startOf('day').subtract(29, 'days');
+       var start = moment().startOf('day').subtract(59, 'days');
        var end = moment().endOf('day');
        function cb(start, end) {
         $('#reportrange span').html(start.format('YYYY-MM-DD HH:mm:ss') + ' - ' + end.format('YYYY-MM-DD HH:mm:ss'));
@@ -278,7 +278,7 @@
 
        $('#reportrange').daterangepicker(
                {
-                   startDate: moment().subtract('days', 29),
+                   startDate: moment().subtract('days', 59),
                    endDate: moment(),
                    minDate: '10/01/2018',    //最小时间
                    maxDate : moment(), //最大时间
@@ -295,6 +295,8 @@
                        '昨日': [moment().subtract('days', 1).startOf('day'), moment().subtract('days', 1).endOf('day')],
                        '最近7日': [moment().subtract('days', 6), moment()],
                        '最近30日': [moment().subtract('days', 29), moment()],
+                       '最近60日': [moment().subtract('days', 59), moment()],
+                       '最近90日': [moment().subtract('days', 89), moment()],
                    },
                    opens : 'right', //日期选择框的弹出位置
                    buttonClasses : [ 'btn btn-default' ],
