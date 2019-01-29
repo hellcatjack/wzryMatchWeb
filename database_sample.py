@@ -5,7 +5,11 @@ from sqlalchemy.orm import sessionmaker , scoped_session
 from sqlalchemy.ext.declarative import declarative_base
 
 # engine = create_engine('sqlite:///./test.db', convert_unicode=True)  # 创建数据库引擎( 当前目录下保存数据库文件)
-engine = create_engine('mysql+mysqlconnector://user:pass@192.168.123.20:3306/teammatchKing?charset=utf8mb4')
+engine = create_engine('mysql+mysqlconnector://user:pass@192.168.123.20:3306/teammatchKing?charset=utf8mb4',
+    pool_size=5,
+    max_overflow=10,
+    pool_timeout=30,
+    pool_pre_ping=True)
 
 db_session = scoped_session(sessionmaker(autocommit=False,
                                          autoflush=False,
