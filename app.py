@@ -48,6 +48,7 @@ def changeToken(token):
 @app.route('/getAll')
 def getAll():
     try:
+        my_session=db_session()
         dataRangeStr = request.args.get('datarange_search')
         heroTypeStr = request.args.get('heroType_search')
         gameTypeStr = request.args.get('gameType_search')
@@ -95,7 +96,7 @@ def getAll():
 
         # print(sql)
         # print(gameTypeStr)
-        rs = db_session.execute(sql,{'dataRangeStartTimeStamp':str(dataRangeStartTimeStamp),'dataRangeEndTimeStamp':str(dataRangeEndTimeStamp),'heroTypeStr':str(heroTypeStr),'gameTypeStr':str(gameTypeStr)})
+        rs = my_session.execute(sql,{'dataRangeStartTimeStamp':str(dataRangeStartTimeStamp),'dataRangeEndTimeStamp':str(dataRangeEndTimeStamp),'heroTypeStr':str(heroTypeStr),'gameTypeStr':str(gameTypeStr)})
         jsonStr = {"data":[]}
         for row in rs:
             tmpStr = []
