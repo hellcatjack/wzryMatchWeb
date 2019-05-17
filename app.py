@@ -71,7 +71,7 @@ def getAll():
             AVG(a.totalHurtPercent) 平均总输出率,AVG(a.totalHurtHeroCntPercent) 平均对英雄输出率,AVG(a.totalBeHurtedCntPercent) 平均承伤率,AVG(a.joinGamePercent) 平均参团率, sum(b.mvpcnt)+sum(b.losemvp) MVP ,(sum(b.mvpcnt)+sum(b.losemvp))/COUNT(1) MVP率, \
             SUM(IF (a.heroPosition=0,1,0)) AS 上路,SUM(IF (a.heroPosition=1,1,0)) AS 中路,SUM(IF (a.heroPosition=2,1,0)) AS 下路,SUM(IF (a.heroPosition=3,1,0)) AS 打野,SUM(IF (a.heroPosition=4,1,0)) AS 辅助, \
             d.roleIcon 图标,d.sex 性别,d.rank 等级值 ,e.heroImg 英雄,e.useCnt 英雄使用次数,e.heroGrade 英雄平均得分,e.heroName 英雄名称,e.goldCnt 金牌数量,e.silverCnt 银牌数量,d.rankStar 星星数量 \
-        FROM players AS a \
+        FROM players AS a FORCE INDEX(idx_roleId)\
             LEFT JOIN matchs AS b \
                 ON a.gameSeq = b.gameSeq \
                     AND a.gameSvrId = b.gameSvrId \
@@ -86,9 +86,7 @@ def getAll():
                 ON a.roleId=e.roleId \
         WHERE b.dteventtime >= :dataRangeStartTimeStamp and b.dteventtime<= :dataRangeEndTimeStamp and a.teamSide = 1 and a.heroPosition = :heroTypeStr and b.gametype = :gameTypeStr \
             AND d.roleId IS NOT NULL \
-        GROUP BY a.roleId \
-            ORDER BY 总场次 DESC,胜率 DESC,MAX(gradeLevelId) desc'
-
+        GROUP BY a.roleId'
 
         if (not heroTypeStr) or int(heroTypeStr) == -1:
             sql = sql.replace('and a.heroPosition = :heroTypeStr','')
@@ -107,6 +105,8 @@ def getAll():
             jsonStr["data"].append(tmpStr)
     except Exception:
         print('traceback.format_exc():\n%s' % traceback.format_exc())
+    finally:
+        my_session.close()
     return json.dumps(jsonStr, cls=DecimalEncoder)
 
 
